@@ -1,0 +1,218 @@
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+namespace Sorting_Visualizer
+{
+    public partial class MainForm : Form
+    {
+        int[] data;
+        Rectangle[] currentFrame;
+        Rectangle[][] frames;
+        private int PanelWidth { get; set; }
+        private int PanelHeight { get; set; }
+        private int RectWidth { get; set; }
+
+        static int speed = 100;
+
+        public MainForm()
+        {
+            InitializeComponent();
+            InitializeFrame();
+        }
+
+        private void InitializeFrame()
+        {
+            frames = new Rectangle[1][];
+            Random rand = new Random();
+            frames[0] = new Rectangle[SizeTrackBar.Value];
+
+            PanelWidth = VisualizerPanel.Width;
+            PanelHeight = VisualizerPanel.Height;
+            RectWidth = PanelWidth / frames[0].Length;
+
+            int positionX = 0;
+            for (int i = 0; i < frames[0].Length; i++)
+            {
+                int rectHeight = rand.Next(0, PanelHeight);
+                frames[0][i] = new Rectangle(positionX, PanelHeight - rectHeight, RectWidth, rectHeight);
+                positionX += RectWidth;
+            }
+
+            currentFrame = frames[0];
+            VisualizerPanel.Invalidate();
+        }
+
+        private void CreateFrame(int[] data)
+        {
+            Array.Resize(ref frames, frames.Length + 1);
+            frames[frames.Length - 1] = new Rectangle[SizeTrackBar.Value];
+            int positionX = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                frames[frames.Length - 1][i] = new Rectangle(positionX, PanelHeight - data[i], RectWidth, data[i]);
+                positionX += RectWidth;
+            }
+        }
+
+        private void DisplayFrame()
+        {
+            Graphics graphics = VisualizerPanel.CreateGraphics();
+            graphics.FillRectangles(new SolidBrush(Color.White), currentFrame);
+        }
+
+        private async void DisplayFrames()
+        {
+            for (int i = 0; i < frames.Length; i++)
+            {
+                currentFrame = frames[i];
+                await Task.Run(() =>
+                {
+                    Thread.Sleep(speed);
+                });
+                VisualizerPanel.Invalidate();
+            }
+        }
+
+        private void Run()
+        {
+
+            switch (AlgorithmComboBox.Text)
+            {
+                case "Quicksort":
+                    Quicksort();
+                    DisplayFrames();
+                    break;
+                case "Bubble sort":
+                    BubbleSort();
+                    DisplayFrames();
+                    break;
+                default:
+                    MessageBox.Show("Please select an algorithm");
+                    break;
+            }
+        }
+
+        private void InitializeData()
+        {
+            data = new int[SizeTrackBar.Value];
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = frames[0][i].Height;
+            }
+        }
+
+        private void Quicksort()
+        {
+            InitializeData();
+
+            Stack<int> stack = new Stack<int>();
+            stack.Push(0);
+            stack.Push(data.Length - 1);
+
+            while (stack.Count > 0)
+            {
+                int high = stack.Pop();
+                int low = stack.Pop();
+
+                if (low < high)
+                {
+                    int partitionIndex = Partition(low, high);
+
+                    stack.Push(low);
+                    stack.Push(partitionIndex - 1);
+
+                    stack.Push(partitionIndex + 1);
+                    stack.Push(high);
+
+                    CreateFrame(data);
+                }
+            }
+
+            int Partition(int low, int high)
+            {
+                int pivot = data[high];
+                int a = low - 1;
+
+                for (int b = low; b <= high; b++)
+                {
+                    if (data[b] < pivot)
+                    {
+                        a++;
+                        (data[b], data[a]) = (data[a], data[b]);
+                    }
+                }
+
+                (data[high], data[a + 1]) = (data[a + 1], data[high]);
+
+                return a + 1;
+            }
+        }
+
+        private void BubbleSort()
+        {
+
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (VisualizerPanel.Width < 1000)
+            {
+                SizeTrackBar.Maximum = 738;
+                SizeTrackBar.Value = 200;
+            }
+            else
+            {
+                SizeTrackBar.Maximum = 1520;
+                SizeTrackBar.Value = 400;
+            }
+            InitializeFrame();
+        }
+
+        private void SortButton_Click(object sender, EventArgs e)
+        {
+            Run();
+            //DisplayFrames(); - Test
+        }
+
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            InitializeFrame();
+        }
+
+        private void SizeTrackBar_ValueChanged(object sender, EventArgs e)
+        {
+            SizeLabel2.Text = SizeTrackBar.Value.ToString();
+        }
+
+        private void SpeedTrackBar_ValueChanged(object sender, EventArgs e)
+        {
+            switch (SpeedTrackBar.Value)
+            {
+                case 0:
+                    speed = 1000;
+                    break;
+                case 1:
+                    speed = 500;
+                    break;
+                case 2:
+                    speed = 100;
+                    break;
+                case 3:
+                    speed = 50;
+                    break;
+                case 4:
+                    speed = 0;
+                    break;
+            }
+        }
+
+        private void VisualizerPanel_Paint(object sender, PaintEventArgs e)
+        {
+            DisplayFrame();
+        }
+    }
+}
