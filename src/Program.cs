@@ -4,15 +4,19 @@ namespace SortingVisualizer
 {
     internal static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
-            System.Windows.Forms.Application.EnableVisualStyles();
-            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            System.Windows.Forms.Application.Run(new MainForm());
+            if (OperatingSystem.IsWindowsVersionAtLeast(6, 1))
+            {
+                System.Windows.Forms.Application.EnableVisualStyles();
+                System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+                System.Windows.Forms.Application.Run(new MainForm());
+            }
+            else
+            {
+                Console.WriteLine("This application requires Windows 6.1 or later.");
+            }
         }
     }
 }

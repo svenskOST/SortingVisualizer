@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+#pragma warning disable CA1416
 namespace SortingVisualizer
 {
     public partial class MainForm : Form
@@ -24,7 +25,7 @@ namespace SortingVisualizer
         private void InitializeData()
         {
             data = new int[SizeTrackBar.Value];
-            Random rand = new Random();
+            Random rand = new();
 
             PanelWidth = VisualizerPanel.Width;
             PanelHeight = VisualizerPanel.Height;
@@ -68,7 +69,7 @@ namespace SortingVisualizer
 
         private async void Quicksort()
         {
-            Stack<int> stack = new Stack<int>();
+            Stack<int> stack = new();
             stack.Push(0);
             stack.Push(data.Length - 1);
 
@@ -92,7 +93,7 @@ namespace SortingVisualizer
                 }
             }
 
-            int Partition(int low, int high)
+            static int Partition(int low, int high)
             {
                 int pivot = data[high];
                 int a = low - 1;
