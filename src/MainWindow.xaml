@@ -11,12 +11,12 @@
             <GradientStop Color="#FF7B8CF5" Offset="0"/>
         </LinearGradientBrush>
     </Window.Background>
-    <Grid>
+    <Grid x:Name="BigGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid x:Name="TopGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="8*"/>
@@ -24,19 +24,19 @@
                 <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="1" Content="Algorithm:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <ComboBox Grid.Column="1" FontFamily="Nineteen Ninety Seven" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand" Margin="300,0,0,0">
-                <Button Content="Quicksort"/>
-                <Button Content="Bubble sort"/>
+            <Label x:Name="AlgorithmLabel" Grid.Column="1" Content="Algorithm:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <ComboBox x:Name="AlgorithmComboBox" Grid.Column="1" FontFamily="Nineteen Ninety Seven" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand" Margin="300,0,0,0">
+                <ComboBoxItem Content="Quicksort"/>
+                <ComboBoxItem Content="Bubble sort"/>
             </ComboBox>
-            <Label Grid.Column="1" Content="Size:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-            <Slider Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="ScrollWE"/>
-            <Button Grid.Column="3" Content="Sort" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand"/>
-            <Button Grid.Column="3" Content="Reset" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand"/>
-            <Label Grid.Column="3" Content="Speed:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-            <Slider Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="ScrollWE"/>
+            <Label x:Name="SizeLabel" Grid.Column="1" Content="Size:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+            <Slider x:Name="SizeSlider" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="ScrollWE"/>
+            <Button x:Name="SortButton" Grid.Column="3" Content="Sort" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand" Click="OnSortClick"/>
+            <Button x:Name="ResetButton" Grid.Column="3" Content="Reset" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" Click="OnResetClick"/>
+            <Label x:Name="SpeedLabel" Grid.Column="3" Content="Speed:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+            <Slider x:Name="SpeedSlider" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="ScrollWE"/>
         </Grid>
-        <Border BorderThickness="3,3,3,3" BorderBrush="Gainsboro" Margin="10,10,10,10" Grid.Row="2" CornerRadius="20,20,20,20" Background="#7F1E1E1E">
+        <Border x:Name="VisualizerBorder" BorderThickness="3,3,3,3" BorderBrush="Gainsboro" Margin="10,10,10,10" Grid.Row="2" CornerRadius="20,20,20,20" Background="#7F1E1E1E">
             <Canvas x:Name="VisualizerCanvas"/>
         </Border>
     </Grid>
