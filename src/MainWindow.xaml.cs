@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace SortingVisualizer
 {
@@ -14,6 +13,13 @@ namespace SortingVisualizer
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void ClipCanvas()
+        {
+            Rect canvasRectangle = new(-1, -1, VisualizerCanvas.ActualWidth + 2, VisualizerCanvas.ActualHeight + 2);
+            RectangleGeometry canvasGeometry = new(canvasRectangle, 20, 20);
+            VisualizerCanvas.Clip = canvasGeometry;
         }
 
         private void InitializeData()
@@ -37,22 +43,24 @@ namespace SortingVisualizer
             double positionX = 0;
             for (int i = 0; i < data!.Length; i++)
             {
-                Rectangle rect = new()
+                Border staple = new()
                 {
-                    Fill = new SolidColorBrush(Colors.White),
+                    Background = new SolidColorBrush(Colors.White),
                     Width = stapleWidth,
-                    Height = data[i]
+                    Height = data[i],
+                    CornerRadius = new(5, 5, 0, 0)
                 };
-                VisualizerCanvas.Children.Add(rect);
-                Canvas.SetBottom(rect, 0);
-                Canvas.SetLeft(rect, positionX);
+                VisualizerCanvas.Children.Add(staple);
+                Canvas.SetBottom(staple, 0);
+                Canvas.SetLeft(staple, positionX);
                 positionX += stapleWidth;
             }
         }
 
-        private void OnWindowLoaded(object sender, RoutedEventArgs e)
+        private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
             InitializeData();
+            ClipCanvas();
         }
     }
 }
