@@ -1,5 +1,7 @@
-﻿using System.Drawing;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace SortingVisualizer
 {
@@ -7,18 +9,17 @@ namespace SortingVisualizer
     {
         static int[]? data;
         static int speed = 50;
-        static int? stapleWidth;
+        static double stapleWidth;
 
         public MainWindow()
         {
             InitializeComponent();
-            InitializeData();
         }
 
         private void InitializeData()
         {
             data = new int[100];
-            stapleWidth = (int) VisualizerCanvas.ActualWidth / data.Length;
+            stapleWidth = VisualizerCanvas.ActualWidth / data.Length;
             Random rand = new();
 
             for (int i = 0; i < data.Length; i++)
@@ -33,12 +34,25 @@ namespace SortingVisualizer
         {
             VisualizerCanvas.Children.Clear();
 
-            int positionX = 0;
+            double positionX = 0;
             for (int i = 0; i < data!.Length; i++)
             {
-                Rectangle rect = new();
+                Rectangle rect = new()
+                {
+                    Fill = new SolidColorBrush(Colors.White),
+                    Width = stapleWidth,
+                    Height = data[i]
+                };
                 VisualizerCanvas.Children.Add(rect);
+                Canvas.SetBottom(rect, 0);
+                Canvas.SetLeft(rect, positionX);
+                positionX += stapleWidth;
             }
+        }
+
+        private void OnWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            InitializeData();
         }
     }
 }
