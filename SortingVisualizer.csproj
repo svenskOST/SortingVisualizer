@@ -25,9 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="assets\NineteenNinetySeven.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
+    <Content Include="assets\NineteenNinetySeven.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

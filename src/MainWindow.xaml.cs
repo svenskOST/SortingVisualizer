@@ -6,9 +6,10 @@ namespace SortingVisualizer
 {
     public partial class MainWindow : Window
     {
-        static int[] data = [];
+        static float[] data = [];
         static int speed = 50;
         static double stapleWidth;
+        static double stapleMargin;
 
         public MainWindow()
         {
@@ -24,16 +25,33 @@ namespace SortingVisualizer
 
         private void InitializeData()
         {
-            data = new int[(int)SizeSlider.Value];
-            stapleWidth = VisualizerCanvas.ActualWidth / data.Length;
-            Random rand = new();
+            data = new float[(int)SizeSlider.Value];
 
+            SetStapleWidth();
+
+            Random rand = new();
             for (int i = 0; i < data.Length; i++)
             {
-                data[i] = rand.Next(0, (int)VisualizerCanvas.ActualHeight);
+                data[i] = rand.NextSingle();
             }
 
             UpdateCanvas();
+        }
+
+        private void SetStapleWidth()
+        {
+            double canvasWidth = VisualizerCanvas.ActualWidth;
+
+            if (data.Length < 201) 
+            {
+                stapleWidth = canvasWidth / data.Length * 0.90;
+                stapleMargin = canvasWidth / data.Length * 0.1;
+            }
+            else
+            {
+                stapleWidth = VisualizerCanvas.ActualWidth / data.Length;
+                stapleMargin = 0;
+            }
         }
 
         private void UpdateCanvas()
@@ -48,13 +66,13 @@ namespace SortingVisualizer
                 {
                     Background = new SolidColorBrush(Colors.White),
                     Width = stapleWidth,
-                    Height = data[i],
-                    CornerRadius = new(stapleRadius, stapleRadius, 0, 0)
+                    Height = (int)VisualizerCanvas.ActualHeight * data[i],
+                    CornerRadius = new(stapleRadius, stapleRadius, 0, 0),
                 };
                 VisualizerCanvas.Children.Add(staple);
                 Canvas.SetBottom(staple, 0);
                 Canvas.SetLeft(staple, positionX);
-                positionX += stapleWidth;
+                positionX += stapleWidth + stapleMargin;
             }
         }
 
@@ -102,7 +120,7 @@ namespace SortingVisualizer
 
             static int Partition(int low, int high)
             {
-                int pivot = data![high];
+                float pivot = data![high];
                 int a = low - 1;
 
                 for (int b = low; b <= high; b++)
@@ -133,15 +151,8 @@ namespace SortingVisualizer
 
         private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (e.HeightChanged)
-            {
-                InitializeData();
-            }
-            else
-            {
-                stapleWidth = VisualizerCanvas.ActualWidth / data.Length;
-                UpdateCanvas();
-            }
+            SetStapleWidth();
+            UpdateCanvas();
             ClipCanvas();
         }
 

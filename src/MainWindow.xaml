@@ -29,7 +29,7 @@
                 <ComboBoxItem Content="Bubble sort"/>
             </ComboBox>
             <Label x:Name="SizeLabel" Content="Size:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,40" Grid.Column="1"/>
-            <Slider x:Name="SizeSlider" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Cursor="ScrollWE" Margin="78,0,0,51" Width="240" SmallChange="1" LargeChange="10" Maximum="2000" Minimum="5" Value="500" IsSnapToTickEnabled="True" ValueChanged="OnSizeValueChanged"/>
+            <Slider x:Name="SizeSlider" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Cursor="ScrollWE" Margin="78,0,0,51" Width="240" SmallChange="1" LargeChange="10" Maximum="2000" Minimum="2" Value="500" IsSnapToTickEnabled="True" ValueChanged="OnSizeValueChanged"/>
             <Label x:Name="SizeLog" Content="{Binding ElementName=SizeSlider, Path=Value}" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="172,0,0,18" Grid.Column="1" FontSize="14"/>
             <Button x:Name="SortButton" Grid.Column="2" Content="Sort" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" Click="OnSortClick" Margin="0,33,196,0" Padding="20,10,20,10" HorizontalContentAlignment="Center" Width="122"/>
             <Button x:Name="ResetButton" Grid.Column="2" Content="Reset" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" Click="OnResetClick" Margin="0,33,10,0" Padding="20,10,20,10" VerticalContentAlignment="Top" HorizontalContentAlignment="Center" Width="122"/>
