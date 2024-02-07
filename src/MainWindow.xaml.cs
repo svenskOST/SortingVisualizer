@@ -155,6 +155,14 @@ namespace SortingVisualizer
             InitializeData();
         }
 
+        private void OnSizeValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (VisualizerCanvas != null)
+            {
+                InitializeData();
+            }
+        }
+
         private void OnSpeedValueChange(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             switch (SpeedSlider.Value)

@@ -18,11 +18,10 @@
         </Grid.RowDefinitions>
         <Grid x:Name="TopGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="8*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="8*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="23*"/>
+                <ColumnDefinition Width="182*"/>
+                <ColumnDefinition Width="182*"/>
+                <ColumnDefinition Width="23*"/>
             </Grid.ColumnDefinitions>
             <Label x:Name="AlgorithmLabel" Grid.Column="1" Content="Algorithm:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,40,0,0"/>
             <ComboBox x:Name="AlgorithmComboBox" Grid.Column="1" FontFamily="Nineteen Ninety Seven" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand" Margin="143,42,0,0" Text="" Width="175">
@@ -30,12 +29,12 @@
                 <ComboBoxItem Content="Bubble sort"/>
             </ComboBox>
             <Label x:Name="SizeLabel" Content="Size:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,40" Grid.Column="1"/>
-            <Slider x:Name="SizeSlider" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Cursor="ScrollWE" Margin="78,0,0,51" Width="240" SmallChange="1" LargeChange="10" Maximum="2000" Minimum="5" Value="500" IsSnapToTickEnabled="True"/>
+            <Slider x:Name="SizeSlider" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Cursor="ScrollWE" Margin="78,0,0,51" Width="240" SmallChange="1" LargeChange="10" Maximum="2000" Minimum="5" Value="500" IsSnapToTickEnabled="True" ValueChanged="OnSizeValueChanged"/>
             <Label x:Name="SizeLog" Content="{Binding ElementName=SizeSlider, Path=Value}" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="172,0,0,18" Grid.Column="1" FontSize="14"/>
-            <Button x:Name="SortButton" Grid.Column="3" Content="Sort" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" Click="OnSortClick" Margin="0,33,196,0" Padding="20,10,20,10" HorizontalContentAlignment="Center" Width="122"/>
-            <Button x:Name="ResetButton" Grid.Column="3" Content="Reset" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" Click="OnResetClick" Margin="0,33,10,0" Padding="20,10,20,10" VerticalContentAlignment="Top" HorizontalContentAlignment="Center" Width="122"/>
-            <Label x:Name="SpeedLabel" Grid.Column="3" Content="Speed:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,228,40"/>
-            <Slider x:Name="SpeedSlider" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="ScrollWE" Margin="0,0,10,45" Width="200" SmallChange="1" LargeChange="2" Maximum="5" Minimum="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" ValueChanged="OnSpeedValueChange" Value="3"/>
+            <Button x:Name="SortButton" Grid.Column="2" Content="Sort" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" Click="OnSortClick" Margin="0,33,196,0" Padding="20,10,20,10" HorizontalContentAlignment="Center" Width="122"/>
+            <Button x:Name="ResetButton" Grid.Column="2" Content="Reset" FontFamily="Nineteen Ninety Seven" FontSize="20" Background="White" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" Click="OnResetClick" Margin="0,33,10,0" Padding="20,10,20,10" VerticalContentAlignment="Top" HorizontalContentAlignment="Center" Width="122"/>
+            <Label x:Name="SpeedLabel" Grid.Column="2" Content="Speed:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,228,40"/>
+            <Slider x:Name="SpeedSlider" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="ScrollWE" Margin="0,0,10,45" Width="200" SmallChange="1" LargeChange="2" Maximum="5" Minimum="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" ValueChanged="OnSpeedValueChange" Value="3"/>
         </Grid>
         <Border x:Name="VisualizerBorder" BorderThickness="3,3,3,3" BorderBrush="Gainsboro" Margin="10,10,10,10" Grid.Row="2" CornerRadius="20,20,20,20" Background="#7F1E1E1E">
             <Canvas x:Name="VisualizerCanvas"/>
