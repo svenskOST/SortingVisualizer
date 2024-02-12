@@ -7,6 +7,7 @@ namespace SortingVisualizer
     public partial class MainWindow : Window
     {
         static float[] data = [];
+        static float[] prevData = [];
         static int speed = 50;
         static double stapleWidth;
         static double stapleMargin;
@@ -34,8 +35,15 @@ namespace SortingVisualizer
             {
                 data[i] = rand.NextSingle();
             }
+            CopyData();
 
             UpdateCanvas();
+        }
+
+        static private void CopyData()
+        {
+            prevData = new float[data.Length];
+            Array.Copy(data, prevData, data.Length);
         }
 
         private void SetStapleWidth()
@@ -60,11 +68,12 @@ namespace SortingVisualizer
 
             double positionX = 0;
             double stapleRadius = stapleWidth * 0.6;
+
             for (int i = 0; i < data.Length; i++)
             {
                 Border staple = new()
                 {
-                    Background = new SolidColorBrush(Colors.White),
+                    Background = new SolidColorBrush(data[i] == prevData[i] ? Colors.White : Colors.Red),
                     Width = stapleWidth,
                     Height = (int)VisualizerCanvas.ActualHeight * data[i],
                     CornerRadius = new(stapleRadius, stapleRadius, 0, 0),
@@ -100,6 +109,8 @@ namespace SortingVisualizer
 
             while (stack.Count > 0)
             {
+                CopyData();
+
                 int high = stack.Pop();
                 int low = stack.Pop();
 
