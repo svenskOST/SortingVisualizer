@@ -12,6 +12,10 @@ namespace SortingVisualizer
         static double stapleWidth;
         static double stapleMargin;
 
+        readonly static SolidColorBrush whiteBrush = new(Colors.White);
+        readonly static SolidColorBrush redBrush = new(Colors.Red);
+        readonly static SolidColorBrush greenBrush = new(Colors.LimeGreen);
+
         public MainWindow()
         {
             InitializeComponent();
@@ -50,7 +54,7 @@ namespace SortingVisualizer
         {
             double canvasWidth = VisualizerCanvas.ActualWidth;
 
-            if (data.Length < 201) 
+            if (data.Length < 201)
             {
                 stapleWidth = canvasWidth / data.Length * 0.90;
                 stapleMargin = canvasWidth / data.Length * 0.1;
@@ -73,7 +77,7 @@ namespace SortingVisualizer
             {
                 Border staple = new()
                 {
-                    Background = new SolidColorBrush(data[i] == prevData[i] ? Colors.White : Colors.Red),
+                    Background = data[i] == prevData[i] ? whiteBrush : redBrush,
                     Width = stapleWidth,
                     Height = (int)VisualizerCanvas.ActualHeight * data[i],
                     CornerRadius = new(stapleRadius, stapleRadius, 0, 0),
@@ -82,6 +86,30 @@ namespace SortingVisualizer
                 Canvas.SetBottom(staple, 0);
                 Canvas.SetLeft(staple, positionX);
                 positionX += stapleWidth + stapleMargin;
+            }
+        }
+
+        private async void DisplayCompletion()
+        {
+            await Task.Delay(200);
+            for (int i = 0; i < data.Length * 1.5; i++)
+            {
+                int startIndex = i - data.Length / 2;
+                int endIndex = i;
+
+                if (startIndex > 0 && startIndex < data.Length)
+                {
+                    Border startStaple = (Border)VisualizerCanvas.Children[startIndex];
+                    startStaple.Background = whiteBrush;
+                }
+
+                if (i < data.Length)
+                {
+                    Border endStaple = (Border)VisualizerCanvas.Children[endIndex];
+                    endStaple.Background = greenBrush;
+                }
+
+                await Task.Delay(600 / data.Length);
             }
         }
 
@@ -109,8 +137,6 @@ namespace SortingVisualizer
 
             while (stack.Count > 0)
             {
-                CopyData();
-
                 int high = stack.Pop();
                 int low = stack.Pop();
 
@@ -125,9 +151,11 @@ namespace SortingVisualizer
                     stack.Push(high);
 
                     await Task.Delay(speed);
-                    UpdateCanvas();
                 }
+                UpdateCanvas();
+                CopyData();
             }
+            DisplayCompletion();
 
             static int Partition(int low, int high)
             {
