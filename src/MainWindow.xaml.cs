@@ -97,7 +97,7 @@ namespace SortingVisualizer
                 int startIndex = i - data.Length / 2;
                 int endIndex = i;
 
-                if (startIndex > 0 && startIndex < data.Length)
+                if (startIndex >= 0 && startIndex < data.Length)
                 {
                     Border startStaple = (Border)VisualizerCanvas.Children[startIndex];
                     startStaple.Background = whiteBrush;
