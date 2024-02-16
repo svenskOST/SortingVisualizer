@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -6,26 +6,19 @@ namespace SortingVisualizer
 {
     public partial class MainWindow : Window
     {
-        static float[] data = [];
-        static float[] prevData = [];
-        static int speed = 50;
-        static double stapleWidth;
-        static double stapleMargin;
+        int speed = 50;
+        float[] data = [];
+        //float[] prevData = [];
+        double stapleWidth;
+        double stapleMargin;
 
-        readonly static SolidColorBrush whiteBrush = new(Colors.White);
-        readonly static SolidColorBrush redBrush = new(Colors.Red);
-        readonly static SolidColorBrush greenBrush = new(Colors.LimeGreen);
+        readonly SolidColorBrush whiteBrush = new(Colors.White);
+        readonly SolidColorBrush redBrush = new(Colors.Red);
+        readonly SolidColorBrush greenBrush = new(Colors.LimeGreen);
 
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void ClipCanvas()
-        {
-            Rect canvasRectangle = new(-1, -1, VisualizerCanvas.ActualWidth + 2, VisualizerCanvas.ActualHeight + 2);
-            RectangleGeometry canvasGeometry = new(canvasRectangle, 20, 20);
-            VisualizerCanvas.Clip = canvasGeometry;
         }
 
         private void InitializeData()
@@ -34,20 +27,50 @@ namespace SortingVisualizer
 
             SetStapleWidth();
 
-            Random rand = new();
+            Random random = new();
             for (int i = 0; i < data.Length; i++)
             {
-                data[i] = rand.NextSingle();
+                data[i] = random.NextSingle();
             }
-            CopyData();
+            //CopyData();
 
-            UpdateCanvas();
+            DrawCanvas();
         }
 
-        static private void CopyData()
+        /*private void CopyData()
         {
             prevData = new float[data.Length];
             Array.Copy(data, prevData, data.Length);
+        }*/
+
+        private void DrawCanvas()
+        {
+            VisualizerCanvas.Children.Clear();
+
+            double positionX = 0;
+            double stapleRadius = stapleWidth * 0.6;
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                Border staple = new()
+                {
+                    Background = whiteBrush,
+                    Width = stapleWidth,
+                    Height = (int)VisualizerCanvas.ActualHeight * data[i],
+                    CornerRadius = new(stapleRadius, stapleRadius, 0, 0),
+                };
+                VisualizerCanvas.Children.Add(staple);
+                Canvas.SetBottom(staple, 0);
+                Canvas.SetLeft(staple, positionX);
+                positionX += stapleWidth + stapleMargin;
+            }
+        }
+
+        private void ClipCanvas()
+        {
+            Rect canvasRectangle = new(-1, -1, VisualizerCanvas.ActualWidth + 2, VisualizerCanvas.ActualHeight + 2);
+            RectangleGeometry canvasGeometry = new(canvasRectangle, 20, 20);
+            VisualizerCanvas.Clip = canvasGeometry;
         }
 
         private void SetStapleWidth()
@@ -66,27 +89,30 @@ namespace SortingVisualizer
             }
         }
 
-        private void UpdateCanvas()
+        private async void UpdateStaples(int a, int b)
         {
-            VisualizerCanvas.Children.Clear();
-
-            double positionX = 0;
-            double stapleRadius = stapleWidth * 0.6;
-
+            /*int[] indexes = [];
             for (int i = 0; i < data.Length; i++)
             {
-                Border staple = new()
+                if (data[i] == prevData[i])
                 {
-                    Background = data[i] == prevData[i] ? whiteBrush : redBrush,
-                    Width = stapleWidth,
-                    Height = (int)VisualizerCanvas.ActualHeight * data[i],
-                    CornerRadius = new(stapleRadius, stapleRadius, 0, 0),
-                };
-                VisualizerCanvas.Children.Add(staple);
-                Canvas.SetBottom(staple, 0);
-                Canvas.SetLeft(staple, positionX);
-                positionX += stapleWidth + stapleMargin;
-            }
+                    indexes[indexes.Length] = i;
+                }
+            }*/
+            Border stapleA = (Border)VisualTreeHelper.GetChild(VisualizerCanvas, a);
+            Border stapleB = (Border)VisualTreeHelper.GetChild(VisualizerCanvas, b);
+
+            double temp = Canvas.GetLeft(stapleA);
+            Canvas.SetLeft(stapleA, Canvas.GetLeft(stapleB));
+            Canvas.SetLeft(stapleB, temp);
+
+            stapleA.Background = redBrush;
+            stapleB.Background = redBrush;
+
+            await Task.Delay(speed);
+
+            stapleA.Background = whiteBrush;
+            stapleB.Background = whiteBrush;
         }
 
         private async void DisplayCompletion()
@@ -97,7 +123,7 @@ namespace SortingVisualizer
                 int startIndex = i - data.Length / 2;
                 int endIndex = i;
 
-                if (startIndex >= 0 && startIndex < data.Length)
+                if (startIndex > 0 && startIndex < data.Length)
                 {
                     Border startStaple = (Border)VisualizerCanvas.Children[startIndex];
                     startStaple.Background = whiteBrush;
@@ -133,7 +159,7 @@ namespace SortingVisualizer
         {
             Stack<int> stack = new();
             stack.Push(0);
-            stack.Push(data!.Length - 1);
+            stack.Push(data.Length - 1);
 
             while (stack.Count > 0)
             {
@@ -142,48 +168,34 @@ namespace SortingVisualizer
 
                 if (low < high)
                 {
-                    int partitionIndex = Partition(low, high);
+                    int a = low - 1;
+
+                    for (int b = low; b <= high; b++)
+                    {
+                        if (data[b] < data[high])
+                        {
+                            a++;
+                            (data[b], data[a]) = (data[a], data[b]);
+                            UpdateStaples(b, a);
+                            await Task.Delay(speed);
+                        }
+                    }
+
+                    (data[high], data[a + 1]) = (data[a + 1], data[high]);
+                    UpdateStaples(high, a + 1);
+                    await Task.Delay(speed);
 
                     stack.Push(low);
-                    stack.Push(partitionIndex - 1);
+                    stack.Push(a);
 
-                    stack.Push(partitionIndex + 1);
+                    stack.Push(a + 2);
                     stack.Push(high);
-                }
-                
-                if (data.Length < 201)
-                {
-                    UpdateCanvas();
-                    CopyData();
-                    await Task.Delay(speed);
+
+                    //UpdateStaples();
+                    //CopyData();
                 }
             }
-
-            if (data.Length > 200)
-            {
-                UpdateCanvas();
-                CopyData();
-            }
-            DisplayCompletion();
-
-            static int Partition(int low, int high)
-            {
-                float pivot = data![high];
-                int a = low - 1;
-
-                for (int b = low; b <= high; b++)
-                {
-                    if (data[b] < pivot)
-                    {
-                        a++;
-                        (data[b], data[a]) = (data[a], data[b]);
-                    }
-                }
-
-                (data[high], data[a + 1]) = (data[a + 1], data[high]);
-
-                return a + 1;
-            }
+            //DisplayCompletion();
         }
 
         private void BubbleSort()
@@ -200,7 +212,7 @@ namespace SortingVisualizer
         private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
             SetStapleWidth();
-            UpdateCanvas();
+            DrawCanvas();
             ClipCanvas();
         }
 
