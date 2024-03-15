@@ -6,6 +6,8 @@ namespace SortingVisualizer
 {
     public partial class MainWindow : Window
     {
+        static bool diff = false;
+
         static float[] data = [];
         static float[] prevData = [];
         static int speed = 50;
@@ -73,11 +75,25 @@ namespace SortingVisualizer
             double positionX = 0;
             double stapleRadius = stapleWidth * 0.6;
 
+            diff = false;
+
             for (int i = 0; i < data.Length; i++)
             {
+                SolidColorBrush stapleBrush;
+
+                if (data[i] == prevData[i])
+                {
+                    stapleBrush = whiteBrush;
+                }
+                else
+                {
+                    stapleBrush = redBrush;
+                    diff = true;
+                }
+
                 Border staple = new()
                 {
-                    Background = data[i] == prevData[i] ? whiteBrush : redBrush,
+                    Background = stapleBrush,
                     Width = stapleWidth,
                     Height = (int)VisualizerCanvas.ActualHeight * data[i],
                     CornerRadius = new(stapleRadius, stapleRadius, 0, 0),
@@ -150,11 +166,11 @@ namespace SortingVisualizer
                     stack.Push(partitionIndex + 1);
                     stack.Push(high);
                 }
-                
-                if (data.Length < 201)
+
+                UpdateCanvas();
+                CopyData();
+                if (diff)
                 {
-                    UpdateCanvas();
-                    CopyData();
                     await Task.Delay(speed);
                 }
             }
