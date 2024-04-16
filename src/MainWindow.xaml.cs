@@ -202,9 +202,33 @@ namespace SortingVisualizer
             }
         }
 
-        private void BubbleSort()
+        private async void BubbleSort()
         {
+            for (int i = 0; i < data.Length - 1; i++)
+            {
+                bool swapped = false;
 
+                for (int j = 0; j < data.Length - i - 1; j++)
+                {
+                    if (data[j] > data[j + 1])
+                    {
+                        (data[j + 1], data[j]) = (data[j], data[j + 1]);
+                        swapped = true;
+                    }
+                }
+
+                UpdateCanvas();
+                CopyData();
+                if (diff)
+                {
+                    await Task.Delay(speed / 2);
+                }
+
+                if (swapped == false)
+                    break;
+            }
+
+            DisplayCompletion();
         }
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
