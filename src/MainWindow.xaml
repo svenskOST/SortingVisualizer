@@ -27,6 +27,7 @@
             <ComboBox x:Name="AlgorithmComboBox" Grid.Column="1" FontFamily="Nineteen Ninety Seven" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="Hand" Margin="143,42,0,0" Width="175">
                 <ComboBoxItem IsSelected="True" Content="Quicksort"/>
                 <ComboBoxItem Content="Bubble sort"/>
+                <ComboBoxItem Content="Stooge sort"/>
             </ComboBox>
             <Label x:Name="SizeLabel" Content="Size:" FontFamily="Nineteen Ninety Seven" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,40" Grid.Column="1"/>
             <Slider x:Name="SizeSlider" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Cursor="ScrollWE" Margin="78,0,0,51" Width="240" SmallChange="1" LargeChange="10" Maximum="1000" Minimum="2" Value="200" IsSnapToTickEnabled="True" ValueChanged="OnSizeValueChanged"/>

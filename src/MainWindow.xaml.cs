@@ -11,6 +11,7 @@ namespace SortingVisualizer
         static float[] data = [];
         static float[] prevData = [];
         static int speed = 50;
+        static int count = 0;
         static double stapleWidth;
         static double stapleMargin;
 
@@ -139,6 +140,9 @@ namespace SortingVisualizer
                 case "Bubble sort":
                     BubbleSort();
                     break;
+                case "Stooge sort":
+                    StoogeSort();
+                    break;
                 default:
                     MessageBox.Show("Please select an algorithm");
                     break;
@@ -169,10 +173,7 @@ namespace SortingVisualizer
 
                 UpdateCanvas();
                 CopyData();
-                if (diff)
-                {
-                    await Task.Delay(speed);
-                }
+                if (diff) await Task.Delay(speed);
             }
 
             if (data.Length > 200)
@@ -219,16 +220,47 @@ namespace SortingVisualizer
 
                 UpdateCanvas();
                 CopyData();
-                if (diff)
-                {
-                    await Task.Delay(speed / 2);
-                }
 
-                if (swapped == false)
-                    break;
+                if (diff) await Task.Delay(speed / 2);
+                if (swapped == false) break;
             }
 
             DisplayCompletion();
+        }
+
+        private async void StoogeSort()
+        {
+            await RecursiveStoogeSort(0, data.Length - 1);
+            CopyData();
+            UpdateCanvas();
+            DisplayCompletion();
+        }
+
+        private async Task RecursiveStoogeSort(int low, int high)
+        {
+            if (low >= high) return;
+
+            if (data[low] > data[high])
+            {
+                (data[low], data[high]) = (data[high], data[low]);
+                count++;
+
+                if (count >= data.Length / 20)
+                {
+                    count = 0;
+                    UpdateCanvas();
+                    CopyData();
+                    if (diff) await Task.Delay(speed);
+                }
+            }
+
+            if (high - low + 1 > 2)
+            {
+                int third = (high - low + 1) / 3;
+                await RecursiveStoogeSort(low, high - third);
+                await RecursiveStoogeSort(low + third, high);
+                await RecursiveStoogeSort(low, high - third);
+            }
         }
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
