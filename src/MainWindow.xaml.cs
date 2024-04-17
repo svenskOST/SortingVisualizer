@@ -6,6 +6,7 @@ namespace SortingVisualizer
 {
     public partial class MainWindow : Window
     {
+        // Denna bool används för att avgöra ifall datan skiljer sig från tidigare, för att undvika onödig grafisk rendering
         static bool diff = false;
 
         static float[] data = [];
@@ -31,6 +32,7 @@ namespace SortingVisualizer
             VisualizerCanvas.Clip = canvasGeometry;
         }
 
+        // Slumpar datan som skall sorteras
         private void InitializeData()
         {
             data = new float[(int)SizeSlider.Value];
@@ -69,6 +71,7 @@ namespace SortingVisualizer
             }
         }
 
+        // Metod som uppdaterar canvasen för att visualisera steg i sorteringen
         private void UpdateCanvas()
         {
             VisualizerCanvas.Children.Clear();
@@ -78,6 +81,7 @@ namespace SortingVisualizer
 
             diff = false;
 
+            // Här jämförs även den nuvarande datan med tidigare data för att markera delar som har flyttats
             for (int i = 0; i < data.Length; i++)
             {
                 SolidColorBrush stapleBrush;
